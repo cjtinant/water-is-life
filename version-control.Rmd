@@ -1,0 +1,76 @@
+---
+title: "mod01_git"
+author: "CJ Tinant"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(usethis)
+
+```
+
+We highly recommend Jenny Bryan & Jim Hester’s [happygitwithr](https://happygitwithr.com) website because it covers everything (and more) that you may encounter when using `git` with R. In particular, please take a moment to check/update your `git` installation and configure Github. The following links will help with this:
+
+-   [**Install Git**](https://happygitwithr.com/install-git.html)
+
+-   [**Introduce yourself to Git**](https://happygitwithr.com/hello-git.html)
+
+
+As she works, the general process she follows is:
+
+- **add:** Do some work, add some files, scripts, etc. To version control these changes, we need to stage or add that work so it can be versioned by git. We do this with git add <my_file> or check the Staged buttons in the RStudio git panel.
+
+- **commit:** Add a commit message that is succinct but descriptive (i.e., added water data files). These are the messages you’ll be able to go back to if you want to travel back in time and see a different version of something…so be kind to your future self and add something helpful.
+
+- **push:** Finally, when we’re ready to send locally commited changes up the cloud, we push this up to the Github remote cloud repository!
+
+## Try it yourself 
+Take the following function and:
+1. Make a new folder in your project called code, save as a script called 01_download_data.R
+2. stage it (either through the Git tab, or via git add),
+3. commit (add a message!),
+4. push to the jo_download_data branch
+
+```{r push-a- commit}
+
+library(fs)
+library(dataRetrieval)
+library(readr)
+library(glue)
+
+# make a function to download data, defaults to current date for end
+
+# function: dates as "YYYY-MM-DD"
+get_daily_flow <- function(gage_no){
+
+  # create folder to save data
+  fs::dir_create("data_raw")
+
+  # set parameters to download data
+  siteNo <- gage_no # The USGS gage number
+  pCode <- "00060" # 00060 is discharge parameter code
+
+  # get NWIS daily data: CURRENT YEAR
+  dat <- readNWISdv(siteNumbers = siteNo,
+                    parameterCd = pCode)
+  # add water year
+  dat <- addWaterYear(dat)
+  # rename the columns
+  dat <- renameNWISColumns(dat)
+
+  # save out
+  write_csv(dat,
+            file =
+              glue("data_raw/nfa_updated_{Sys.Date()}.csv"))
+}
+
+# RUN with:
+#siteNo <- "11427000"# NF American River
+# get_daily_flow(siteNo)
+
+
+
+```
+
