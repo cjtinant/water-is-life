@@ -167,6 +167,7 @@ To illustrate the use of `.Renviron`, we run `usethis::edit_r_environ()`, add th
 
 ```{r usethis-renviron}
 usethis::edit_r_environ()
+
 ```
 
 We can access our environmental variable as follows (remember you need to restart R for changes to take effect, try **`Session > Restart R`**):
@@ -271,7 +272,7 @@ Best practices for writing code across languages typically recommend package imp
 
 ```{r org-ex, eval = FALSE}
 # import packages
-library(tidyvere)
+library(tidyverse)
 library(fs)
 
 # define functions
@@ -295,6 +296,9 @@ For instance, although the `inspire_me()` function above is relatively simple, w
 <aside>Notice that all functions start with `f_`. This prefix makes it easy to read in a script and takes advantage of auto-complete.</aside>
 
 ```{r functions-r, eval = FALSE}
+
+# Imagine we created a script called functions.R that contained the following code. 
+
 # list packages in a vector and load them all
 pkgs <- c("readr", "cowsay")
 purrr::walk(pkgs, require, character.only = TRUE)
@@ -318,6 +322,7 @@ f_inspire_me <- function(d){
   animals <- names(animals)
   say(sample(d$full_quote, 1), by = sample(animals, 1))
 }
+
 ```
 
 We can call this script using `source()` to load or import these functions into our environment where they are available for use, just as we load a library.
@@ -396,6 +401,8 @@ url <- glue("https://gist.githubusercontent.com/{repo}/{csv}")
 f_read_data(url) %>% 
   f_preprocess_data() %>% 
   f_inspire_me()
+
+source("scripts/01_control.R")
 
 ```
 
